@@ -1,29 +1,25 @@
 package nbsp
 
-import "regexp"
+import (
+	"regexp"
+)
 
-// structure of the expressions to find and replace
-type setup struct {
-	regex       string
-	replacement string
-}
+// Repl represents the string which replaces the spaces in the
+var Repl = "\u00A0"
 
-// list of all replacements to do
-var list = []setup{
-	{regex: `(\d) `, replacement: "$1 "},
-	{regex: `^(A|I|O|U|K|S|V|Z) `, replacement: "$1 "},
-	{regex: ` (A|I|O|U|K|S|V|Z|a|i|o|u|k|s|v|z) `, replacement: " $1 "},
-	{regex: `(\d\.) `, replacement: "$1 "},
-	{regex: `([A-Z]\.) `, replacement: "$1 "},
+// Setup contains data of the expressions to find and replace
+type Setup struct {
+	Regex       string
+	Replacement string
 }
 
 // Replace will retrieve the original string and return the modified one
-func Replace(s string) string {
+func Replace(s string, list []Setup) string {
 	for {
 		// replace all cases by its replacement string
 		gen := s
 		for i := 0; i < len(list); i++ {
-			gen = regexp.MustCompile(list[i].regex).ReplaceAllString(gen, list[i].replacement)
+			gen = regexp.MustCompile(list[i].Regex).ReplaceAllString(gen, list[i].Replacement)
 		}
 
 		// do the comparison
